@@ -7,6 +7,7 @@ import { CoursesModule } from './courses/courses.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { AssessmentsModule } from './assessments/assessments.module';
 import { MessagesModule } from './messages/messages.module';
+import { OnboardingModule } from './onboarding/onboarding.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { MessagesModule } from './messages/messages.module';
     SchedulesModule,
     AssessmentsModule,
     MessagesModule,
+    OnboardingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
