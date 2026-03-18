@@ -31,14 +31,18 @@ A conventional school is organized around a fixed hierarchy and rigid processes:
 | **Parents** | Receive periodic report cards and attend scheduled meetings |
 | **Support Staff** | Counselors, librarians, and admin clerks operate in siloed departments |
 
-### Traditional Pain Points
+### Traditional Pain Points & Next Line of Actions
 
-- 🕐 **Rigid timetables** — every student follows the same schedule regardless of learning pace or style
-- 📋 **Standardized curriculum** — one-size-fits-all content that leaves advanced learners bored and struggling learners behind
-- 🏢 **Physical dependency** — learning is tied to a physical building, limiting access for remote or differently-abled students
-- 📊 **Infrequent feedback** — progress is measured through periodic exams rather than continuous assessment
-- 🔒 **Siloed communication** — teachers, parents, and administrators rarely collaborate in real time
-- 🎓 **Credential-focused** — success is measured by grades and certificates rather than demonstrated skills
+| # | Pain Point | Description | Next Line of Actions |
+|---|---|---|---|
+| 1 | 🕐 **Rigid Timetables** | Every student follows the same schedule regardless of learning pace or style | • Implement a flexible scheduling service with personalised daily plans<br>• Introduce asynchronous content delivery to replace mandatory bell schedules<br>• Build an on-demand booking system for live sessions |
+| 2 | 📋 **Standardised Curriculum** | One-size-fits-all content leaves advanced learners bored and struggling learners behind | • Develop an AI-powered adaptive learning engine that adjusts difficulty per student<br>• Create elective track offerings (STEM, Arts, Entrepreneurship, Trades)<br>• Enable self-paced modules where learners advance upon demonstrating mastery |
+| 3 | 🏢 **Physical Dependency** | Learning is tied to a physical building, limiting access for remote or differently-abled students | • Build a responsive web and mobile app with full offline support<br>• Implement accessibility-first design (screen readers, adjustable text, colour contrast)<br>• Add a multi-language interface with auto-generated translated content |
+| 4 | 📊 **Infrequent Feedback** | Progress is measured through periodic high-stakes exams rather than continuous assessment | • Introduce formative micro-assessments throughout each module<br>• Build real-time progress dashboards for students, teachers, and parents<br>• Deploy an automated early-warning system for at-risk students<br>• Launch a skill-based portfolio system for verified competencies |
+| 5 | 🔒 **Siloed Communication** | Teachers, parents, and administrators rarely collaborate in real time | • Build a unified communication hub with direct in-app messaging across all stakeholders<br>• Deliver weekly AI-generated progress summaries to parents via email or SMS<br>• Create shared visibility dashboards so all parties see the same data in real time |
+| 6 | 🎓 **Credential-Focused Culture** | Success is measured by grades and certificates rather than demonstrated skills | • Shift to a competency-based model with verified digital badges<br>• Introduce project-based learning sprints that produce tangible portfolio artefacts<br>• Establish a peer-to-peer tutoring marketplace where advanced students earn credits |
+
+> **API:** The full structured list of pain points and next actions is also available via the REST API at `GET /pain-points` (individual records at `GET /pain-points/:id`).
 
 ---
 
