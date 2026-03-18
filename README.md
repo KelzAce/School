@@ -152,7 +152,7 @@ Students are diverse. Their learning needs, paces, interests, and life circumsta
 |---|---|
 | **Frontend** | React, TypeScript, TailwindCSS |
 | **Mobile** | React Native (iOS & Android) |
-| **Backend** | Node.js, Express, GraphQL |
+| **Backend** | Node.js, NestJS, GraphQL |
 | **Database** | PostgreSQL, Redis |
 | **AI / ML** | Python, TensorFlow, OpenAI API |
 | **Auth** | OAuth 2.0, JWT |
