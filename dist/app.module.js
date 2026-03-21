@@ -16,6 +16,13 @@ const typeorm_1 = require("@nestjs/typeorm");
 const app_controller_js_1 = require("./app.controller.js");
 const app_service_js_1 = require("./app.service.js");
 const tenants_module_js_1 = require("./tenants/tenants.module.js");
+const pain_points_module_js_1 = require("./pain-points/pain-points.module.js");
+const students_module_js_1 = require("./students/students.module.js");
+const courses_module_js_1 = require("./courses/courses.module.js");
+const schedules_module_js_1 = require("./schedules/schedules.module.js");
+const assessments_module_js_1 = require("./assessments/assessments.module.js");
+const messages_module_js_1 = require("./messages/messages.module.js");
+const onboarding_module_js_1 = require("./onboarding/onboarding.module.js");
 const database_config_js_1 = __importDefault(require("./config/database.config.js"));
 let AppModule = class AppModule {
 };
@@ -42,6 +49,13 @@ exports.AppModule = AppModule = __decorate([
                 }),
             }),
             tenants_module_js_1.TenantsModule,
+            pain_points_module_js_1.PainPointsModule,
+            students_module_js_1.StudentsModule,
+            courses_module_js_1.CoursesModule,
+            schedules_module_js_1.SchedulesModule,
+            assessments_module_js_1.AssessmentsModule,
+            messages_module_js_1.MessagesModule,
+            onboarding_module_js_1.OnboardingModule,
         ],
         controllers: [app_controller_js_1.AppController],
         providers: [app_service_js_1.AppService],
