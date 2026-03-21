@@ -4,6 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { TenantsModule } from './tenants/tenants.module.js';
+import { PainPointsModule } from './pain-points/pain-points.module.js';
+import { StudentsModule } from './students/students.module.js';
+import { CoursesModule } from './courses/courses.module.js';
+import { SchedulesModule } from './schedules/schedules.module.js';
+import { AssessmentsModule } from './assessments/assessments.module.js';
+import { MessagesModule } from './messages/messages.module.js';
+import { OnboardingModule } from './onboarding/onboarding.module.js';
 import databaseConfig from './config/database.config.js';
 
 @Module({
@@ -27,6 +34,13 @@ import databaseConfig from './config/database.config.js';
       }),
     }),
     TenantsModule,
+    PainPointsModule,
+    StudentsModule,
+    CoursesModule,
+    SchedulesModule,
+    AssessmentsModule,
+    MessagesModule,
+    OnboardingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
