@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LearningTrack } from '../students/students.service';
+import { LearningTrack } from '../students/entities/student-profile.entity';
 
 export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
 
