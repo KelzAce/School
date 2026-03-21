@@ -5,3 +5,21 @@ dist
 .env
 .env.local
 .env.*.local
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Coverage & logs
+coverage/
+*.log
+npm-debug.log*
+
+# Build artifacts
+*.tsbuildinfo

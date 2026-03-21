@@ -26,6 +26,7 @@ async function bootstrap() {
       { type: 'apiKey', name: 'X-Tenant-ID', in: 'header' },
       'tenant-id',
     )
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

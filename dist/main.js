@@ -19,6 +19,7 @@ async function bootstrap() {
         .setDescription('NestJS enterprise API for School Reimagined')
         .setVersion('1.0')
         .addApiKey({ type: 'apiKey', name: 'X-Tenant-ID', in: 'header' }, 'tenant-id')
+        .addBearerAuth()
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api/docs', app, document);
