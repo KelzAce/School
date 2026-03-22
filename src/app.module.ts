@@ -16,7 +16,7 @@ import { SchedulesModule } from './schedules/schedules.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { MessagesModule } from './messages/messages.module.js';
 import { OnboardingModule } from './onboarding/onboarding.module.js';
-import { BadgesModule } from './badges/badges.module.js';
+import { CompetencyModule } from './competency/competency.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import databaseConfig from './config/database.config.js';
 
@@ -52,7 +52,7 @@ import databaseConfig from './config/database.config.js';
     AssessmentsModule,
     MessagesModule,
     OnboardingModule,
-    BadgesModule,
+    CompetencyModule,
   ],
   controllers: [AppController],
   providers: [

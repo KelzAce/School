@@ -44,13 +44,13 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 5 | **Instructor Management** | ✅ Done | Instructor profiles with qualifications, certifications (JSONB), specializations, course load limits. Course assignments with role (primary/assistant/guest) and load validation |
 | 6 | **Class Scheduling & Cohorts** | ✅ Done | Cohort management with program linkage, capacity limits, and lifecycle (forming → active → completed). Class sessions with day/time scheduling, session types (lecture/lab/workshop/field_work/assessment/async), instructor & room assignment, conflict detection. Cohort enrollments with capacity enforcement and status tracking |
 
-### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (3/4)
+### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (2/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 7 | **Skills Taxonomy Engine** | ✅ Done | Hierarchical skill ontology with O*NET/ESCO industry standard codes. Skill categories, typed skills (technical/soft/digital/industry), course-skill mappings with proficiency targets, student skill tracking |
 | 8 | **Competency Tracking & Progression** | ✅ Done | Competency assessments with auto-result calculation (advanced/competent/not_yet_competent). Mastery records immutably log level achievements. Progress dashboards with per-course skill tracking, mastery timelines, and level distribution |
-| 9 | **Digital Badges & Micro-Credentials** | ✅ Done | Badge templates with skill requirements and Open Badges alignment. Badge issuance with SHA-256 verification hashes, evidence tracking, revocation. Stackable micro-credentials bundling badges/skills with public verification endpoints. Public verify-by-hash for badges and credentials |
+| 9 | **Digital Badges & Micro-Credentials** | ⬜ Planned | Verifiable, stackable credentials issued on skill mastery. Aligns with Open Badges standard |
 | 10 | **Portfolio-Based Assessment** | ⬜ Planned | Students submit project work, artifacts, and evidence of competency |
 
 ### Phase 3: Industry Integration — ⬜ Planned
@@ -100,15 +100,6 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/cohort-enrollments` | POST, GET, PATCH, DELETE | Student-to-cohort enrollment with capacity checks |
 | `/api/competency-assessments` | POST, GET | Record & query competency assessments (by student, by skill) |
 | `/api/progress` | GET | Student progress summaries, course progress, mastery timelines |
-| `/api/badges/templates` | POST, GET, PATCH, DELETE | Badge template CRUD (admin) |
-| `/api/badges/issue` | POST | Issue badge to student with verification hash |
-| `/api/badges/issued` | GET | List & query issued badges (by student) |
-| `/api/badges/verify/:hash` | GET | Public badge verification by hash |
-| `/api/badges/issued/:id/revoke` | PATCH | Revoke an issued badge |
-| `/api/micro-credentials` | POST, GET | Issue & list micro-credentials |
-| `/api/micro-credentials/student/:id` | GET | Student's active micro-credentials |
-| `/api/micro-credentials/verify/:hash` | GET | Public credential verification |
-| `/api/micro-credentials/:id/revoke` | PATCH | Revoke a micro-credential |
 
 ---
 
