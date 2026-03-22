@@ -33,7 +33,7 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 
 ## Current Features
 
-### Phase 1: Core Operations (Foundation) — ✅ Complete (5/6)
+### Phase 1: Core Operations (Foundation) — ✅ Complete (6/6)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
@@ -42,7 +42,7 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 3 | **Student Enrollment & Profiles** | ✅ Done | Skills-focused student profiles with learning tracks, prior competencies, career aspirations. Enrollment lifecycle with state machine (pending → active → completed) |
 | 4 | **Program & Course Management** | ✅ Done | Modular programs with learning tracks and duration. Courses with difficulty levels, JSONB module structure, async support. Unique codes per tenant |
 | 5 | **Instructor Management** | ✅ Done | Instructor profiles with qualifications, certifications (JSONB), specializations, course load limits. Course assignments with role (primary/assistant/guest) and load validation |
-| 6 | **Class Scheduling & Cohorts** | ⬜ Planned | Flexible scheduling for workshops, labs, online sessions, and hybrid delivery |
+| 6 | **Class Scheduling & Cohorts** | ✅ Done | Cohort management with program linkage, capacity limits, and lifecycle (forming → active → completed). Class sessions with day/time scheduling, session types (lecture/lab/workshop/field_work/assessment/async), instructor & room assignment, conflict detection. Cohort enrollments with capacity enforcement and status tracking |
 
 ### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (1/4)
 
@@ -95,6 +95,9 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/skill-categories` | POST, GET, PATCH, DELETE | Skill category management |
 | `/api/skills` | POST, GET, PATCH, DELETE | Skill CRUD (with category/type filters) |
 | `/api/skill-mappings/*` | POST, GET, PATCH, DELETE | Course-skill and student-skill mappings |
+| `/api/cohorts` | POST, GET, PATCH, DELETE | Cohort CRUD with program filter |
+| `/api/class-sessions` | POST, GET, PATCH, DELETE | Class session scheduling (by cohort/instructor) |
+| `/api/cohort-enrollments` | POST, GET, PATCH, DELETE | Student-to-cohort enrollment with capacity checks |
 
 ---
 
