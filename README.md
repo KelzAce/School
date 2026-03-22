@@ -44,12 +44,12 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 5 | **Instructor Management** | ✅ Done | Instructor profiles with qualifications, certifications (JSONB), specializations, course load limits. Course assignments with role (primary/assistant/guest) and load validation |
 | 6 | **Class Scheduling & Cohorts** | ✅ Done | Cohort management with program linkage, capacity limits, and lifecycle (forming → active → completed). Class sessions with day/time scheduling, session types (lecture/lab/workshop/field_work/assessment/async), instructor & room assignment, conflict detection. Cohort enrollments with capacity enforcement and status tracking |
 
-### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (1/4)
+### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (2/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 7 | **Skills Taxonomy Engine** | ✅ Done | Hierarchical skill ontology with O*NET/ESCO industry standard codes. Skill categories, typed skills (technical/soft/digital/industry), course-skill mappings with proficiency targets, student skill tracking |
-| 8 | **Competency Tracking & Progression** | ⬜ Planned | Students advance by demonstrating mastery, not by time in class. Progress dashboards show skill acquisition in real-time |
+| 8 | **Competency Tracking & Progression** | ✅ Done | Competency assessments with auto-result calculation (advanced/competent/not_yet_competent). Mastery records immutably log level achievements. Progress dashboards with per-course skill tracking, mastery timelines, and level distribution |
 | 9 | **Digital Badges & Micro-Credentials** | ⬜ Planned | Verifiable, stackable credentials issued on skill mastery. Aligns with Open Badges standard |
 | 10 | **Portfolio-Based Assessment** | ⬜ Planned | Students submit project work, artifacts, and evidence of competency |
 
@@ -98,6 +98,8 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/cohorts` | POST, GET, PATCH, DELETE | Cohort CRUD with program filter |
 | `/api/class-sessions` | POST, GET, PATCH, DELETE | Class session scheduling (by cohort/instructor) |
 | `/api/cohort-enrollments` | POST, GET, PATCH, DELETE | Student-to-cohort enrollment with capacity checks |
+| `/api/competency-assessments` | POST, GET | Record & query competency assessments (by student, by skill) |
+| `/api/progress` | GET | Student progress summaries, course progress, mastery timelines |
 
 ---
 
