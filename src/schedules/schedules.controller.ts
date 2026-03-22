@@ -3,53 +3,77 @@ import {
   Get,
   Post,
   Patch,
+  Delete,
   Param,
-  Query,
   Body,
-  NotFoundException,
+  Query,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import {
-  SchedulesService,
-  ScheduleSlot,
-  CreateScheduleSlotDto,
-  ScheduleStatus,
-} from './schedules.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CohortsService } from './cohorts.service.js';
+import { CreateCohortDto, UpdateCohortDto } from './dto/cohort.dto.js';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto.js';
+import { Roles } from '../auth/decorators/roles.decorator.js';
+import { UserRole } from '../users/entities/user.entity.js';
+import { TenantId } from '../tenants/decorators/tenant-id.decorator.js';
 
-@Controller('schedules')
-export class SchedulesController {
-  constructor(private readonly schedulesService: SchedulesService) {}
+@ApiTags('Cohorts')
+@Controller('cohorts')
+export class CohortsController {
+  constructor(private readonly cohortsService: CohortsService) {}
+
+  @Post()
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Create a cohort' })
+  @ApiResponse({ status: 201, description: 'Cohort created' })
+  @ApiResponse({ status: 409, description: 'Code already exists' })
+  create(@TenantId() tenantId: string, @Body() dto: CreateCohortDto) {
+    return this.cohortsService.create(tenantId, dto);
+  }
 
   @Get()
-  findAll(@Query('studentId') studentId?: string): ScheduleSlot[] {
-    if (studentId) {
-      return this.schedulesService.findByStudent(studentId);
-    }
-    return this.schedulesService.findAll();
+  @ApiOperation({ summary: 'List all cohorts' })
+  findAll(@TenantId() tenantId: string, @Query() query: PaginationQueryDto) {
+    return this.cohortsService.findAll(tenantId, query);
+  }
+
+  @Get('program/:programId')
+  @ApiOperation({ summary: 'List cohorts by program' })
+  findByProgram(
+    @TenantId() tenantId: string,
+    @Param('programId', ParseUUIDPipe) programId: string,
+  ) {
+    return this.cohortsService.findByProgram(tenantId, programId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): ScheduleSlot {
-    const slot = this.schedulesService.findOne(id);
-    if (!slot) {
-      throw new NotFoundException(`Schedule slot with id "${id}" not found`);
-    }
-    return slot;
+  @ApiOperation({ summary: 'Get a cohort by ID' })
+  @ApiResponse({ status: 404, description: 'Not found' })
+  findOne(
+    @TenantId() tenantId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.cohortsService.findOne(tenantId, id);
   }
 
-  @Post()
-  create(@Body() dto: CreateScheduleSlotDto): ScheduleSlot {
-    return this.schedulesService.create(dto);
+  @Patch(':id')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Update a cohort' })
+  update(
+    @TenantId() tenantId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateCohortDto,
+  ) {
+    return this.cohortsService.update(tenantId, id, dto);
   }
 
-  @Patch(':id/status')
-  updateStatus(
-    @Param('id') id: string,
-    @Body('status') status: ScheduleStatus,
-  ): ScheduleSlot {
-    const slot = this.schedulesService.updateStatus(id, status);
-    if (!slot) {
-      throw new NotFoundException(`Schedule slot with id "${id}" not found`);
-    }
-    return slot;
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: 'Delete a cohort' })
+  remove(
+    @TenantId() tenantId: string,
+    @Param('id', ParseUUIDPipe) id: string,
+  ) {
+    return this.cohortsService.remove(tenantId, id);
   }
 }
