@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity.js';
 import { StudentProfile } from './student-profile.entity.js';
 import { Tenant } from '../../tenants/entities/tenant.entity.js';
+import { Program } from '../../courses/entities/program.entity.js';
 
 export enum EnrollmentStatus {
   PENDING = 'pending',
@@ -28,9 +29,12 @@ export class Enrollment extends BaseEntity {
   @JoinColumn({ name: 'studentProfileId' })
   studentProfile: StudentProfile;
 
-  /** References courses.id — FK will be added when Courses module gets TypeORM */
   @Column({ type: 'uuid' })
   programId: string;
+
+  @ManyToOne(() => Program, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'programId' })
+  program: Program;
 
   @Column({ type: 'enum', enum: EnrollmentStatus, default: EnrollmentStatus.PENDING })
   status: EnrollmentStatus;

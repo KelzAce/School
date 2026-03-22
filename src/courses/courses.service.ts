@@ -1,141 +1,107 @@
-import { Injectable } from '@nestjs/common';
-import { LearningTrack } from '../students/entities/student-profile.entity';
-
-export type Difficulty = 'beginner' | 'intermediate' | 'advanced';
-
-export interface CourseModule {
-  id: string;
-  title: string;
-  content: string;
-  order: number;
-}
-
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  track: LearningTrack;
-  difficulty: Difficulty;
-  isAsynchronous: boolean;
-  modules: CourseModule[];
-}
-
-export interface CreateCourseDto {
-  title: string;
-  description: string;
-  track: LearningTrack;
-  difficulty: Difficulty;
-  isAsynchronous: boolean;
-}
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Course } from './entities/course.entity.js';
+import { CreateCourseDto } from './dto/create-course.dto.js';
+import { UpdateCourseDto } from './dto/update-course.dto.js';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto.js';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface.js';
 
 @Injectable()
 export class CoursesService {
-  private readonly courses: Course[] = [
-    {
-      id: 'co-001',
-      title: 'Introduction to Python',
-      description:
-        'A self-paced beginner course covering programming fundamentals with Python. Students advance upon demonstrating mastery of each module.',
-      track: 'STEM',
-      difficulty: 'beginner',
-      isAsynchronous: true,
-      modules: [
-        {
-          id: 'co-001-m1',
-          title: 'Variables & Data Types',
-          content:
-            'Understand how to declare variables, assign values, and work with primitive data types.',
-          order: 1,
-        },
-        {
-          id: 'co-001-m2',
-          title: 'Control Flow',
-          content:
-            'Write conditional statements and loops to control program execution.',
-          order: 2,
-        },
-        {
-          id: 'co-001-m3',
-          title: 'Functions & Modules',
-          content:
-            'Define reusable functions and organise code into modules.',
-          order: 3,
-        },
-      ],
-    },
-    {
-      id: 'co-002',
-      title: 'Entrepreneurship Fundamentals',
-      description:
-        'An elective track course guiding students through ideation, market research, and building a minimum viable product.',
-      track: 'Entrepreneurship',
-      difficulty: 'intermediate',
-      isAsynchronous: true,
-      modules: [
-        {
-          id: 'co-002-m1',
-          title: 'Identifying Opportunities',
-          content:
-            'Techniques for spotting real-world problems and evaluating their market potential.',
-          order: 1,
-        },
-        {
-          id: 'co-002-m2',
-          title: 'Lean Startup Principles',
-          content:
-            'Apply build-measure-learn cycles to validate assumptions quickly.',
-          order: 2,
-        },
-      ],
-    },
-    {
-      id: 'co-003',
-      title: 'Visual Arts & Design Thinking',
-      description:
-        'Blends traditional visual arts techniques with human-centred design thinking methodology.',
-      track: 'Arts',
-      difficulty: 'beginner',
-      isAsynchronous: false,
-      modules: [
-        {
-          id: 'co-003-m1',
-          title: 'Principles of Design',
-          content:
-            'Explore balance, contrast, hierarchy, and colour theory through hands-on projects.',
-          order: 1,
-        },
-        {
-          id: 'co-003-m2',
-          title: 'Design Thinking Process',
-          content:
-            'Empathise, define, ideate, prototype, and test solutions to real community challenges.',
-          order: 2,
-        },
-      ],
-    },
-  ];
+  constructor(
+    @InjectRepository(Course)
+    private readonly courseRepo: Repository<Course>,
+  ) {}
 
-  private nextIdCounter = 4;
+  async create(tenantId: string, dto: CreateCourseDto): Promise<Course> {
+    const existing = await this.courseRepo.findOne({
+      where: { tenantId, code: dto.code },
+    });
+    if (existing) {
+      throw new ConflictException(
+        `Course code "${dto.code}" already exists in this tenant`,
+      );
+    }
 
-  findAll(): Course[] {
-    return this.courses;
+    const course = this.courseRepo.create({ ...dto, tenantId });
+    return this.courseRepo.save(course);
   }
 
-  findOne(id: string): Course | undefined {
-    return this.courses.find((c) => c.id === id);
-  }
+  async findAll(
+    tenantId: string,
+    query: PaginationQueryDto,
+    track?: string,
+  ): Promise<PaginatedResult<Course>> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const skip = (page - 1) * limit;
 
-  findByTrack(track: LearningTrack): Course[] {
-    return this.courses.filter((c) => c.track === track);
-  }
+    const where: Record<string, unknown> = { tenantId };
+    if (track) {
+      where.learningTrack = track;
+    }
 
-  create(dto: CreateCourseDto): Course {
-    const course: Course = {
-      id: `co-${String(this.nextIdCounter++).padStart(3, '0')}`,
-      ...dto,
-      modules: [],
+    const [data, total] = await this.courseRepo.findAndCount({
+      where,
+      relations: ['program'],
+      order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
+    });
+
+    return {
+      data,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
-    this.courses.push(course);
+  }
+
+  async findOne(tenantId: string, id: string): Promise<Course> {
+    const course = await this.courseRepo.findOne({
+      where: { id, tenantId },
+      relations: ['program'],
+    });
+    if (!course) {
+      throw new NotFoundException(`Course with id "${id}" not found`);
+    }
     return course;
+  }
+
+  async findByProgram(tenantId: string, programId: string): Promise<Course[]> {
+    return this.courseRepo.find({
+      where: { tenantId, programId },
+      order: { createdAt: 'ASC' },
+    });
+  }
+
+  async update(
+    tenantId: string,
+    id: string,
+    dto: UpdateCourseDto,
+  ): Promise<Course> {
+    const course = await this.findOne(tenantId, id);
+
+    if (dto.code && dto.code !== course.code) {
+      const taken = await this.courseRepo.findOne({
+        where: { tenantId, code: dto.code },
+      });
+      if (taken) {
+        throw new ConflictException(
+          `Course code "${dto.code}" already exists in this tenant`,
+        );
+      }
+    }
+
+    Object.assign(course, dto);
+    return this.courseRepo.save(course);
+  }
+
+  async remove(tenantId: string, id: string): Promise<Course> {
+    const course = await this.findOne(tenantId, id);
+    return this.courseRepo.remove(course);
   }
 }
