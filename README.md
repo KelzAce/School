@@ -33,57 +33,68 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 
 ## Current Features
 
-- **Health Check:** `GET /api/health` — returns service status
+### Phase 1: Core Operations (Foundation) — ✅ Complete (5/6)
 
----
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 1 | **Multi-Tenant Architecture** | ✅ Done | Tenant entity with slug/domain resolution, tenant middleware, tenant-scoped data isolation across all modules |
+| 2 | **Identity & Access Management** | ✅ Done | JWT auth with refresh token rotation, role-based guards (super_admin/admin/instructor/student/industry_partner/guardian), password reset flow |
+| 3 | **Student Enrollment & Profiles** | ✅ Done | Skills-focused student profiles with learning tracks, prior competencies, career aspirations. Enrollment lifecycle with state machine (pending → active → completed) |
+| 4 | **Program & Course Management** | ✅ Done | Modular programs with learning tracks and duration. Courses with difficulty levels, JSONB module structure, async support. Unique codes per tenant |
+| 5 | **Instructor Management** | ✅ Done | Instructor profiles with qualifications, certifications (JSONB), specializations, course load limits. Course assignments with role (primary/assistant/guest) and load validation |
+| 6 | **Class Scheduling & Cohorts** | ⬜ Planned | Flexible scheduling for workshops, labs, online sessions, and hybrid delivery |
 
-## Feature Roadmap
+### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (1/4)
 
-### Phase 1: Core Operations (Foundation)
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 7 | **Skills Taxonomy Engine** | ✅ Done | Hierarchical skill ontology with O*NET/ESCO industry standard codes. Skill categories, typed skills (technical/soft/digital/industry), course-skill mappings with proficiency targets, student skill tracking |
+| 8 | **Competency Tracking & Progression** | ⬜ Planned | Students advance by demonstrating mastery, not by time in class. Progress dashboards show skill acquisition in real-time |
+| 9 | **Digital Badges & Micro-Credentials** | ⬜ Planned | Verifiable, stackable credentials issued on skill mastery. Aligns with Open Badges standard |
+| 10 | **Portfolio-Based Assessment** | ⬜ Planned | Students submit project work, artifacts, and evidence of competency |
 
-| # | Feature | Description |
-|---|---------|-------------|
-| 1 | **Multi-Tenant Architecture** | Single platform serving multiple schools/campuses in a district — each with isolated data but shared infrastructure |
-| 2 | **Identity & Access Management** | Role-based access (Admin, Instructor, Student, Industry Partner, Guardian) with JWT auth and OAuth2 social login |
-| 3 | **Student Enrollment & Profiles** | Skills-focused profiles — not just demographics but learning goals, prior competencies, career aspirations |
-| 4 | **Program & Course Management** | Modular, competency-based program structures instead of rigid semester-locked courses. Programs defined by skill outcomes, not seat-time |
-| 5 | **Instructor Management** | Instructor profiles with industry credentials, specializations, and capacity tracking |
-| 6 | **Class Scheduling & Cohorts** | Flexible scheduling for workshops, labs, online sessions, and hybrid delivery — not just traditional timetables |
+### Phase 3: Industry Integration — ⬜ Planned
 
-### Phase 2: Competency-Based Learning (4IR Core)
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 11 | **Industry Partner Portal** | ⬜ Planned | Companies post apprenticeship/internship opportunities, review portfolios, validate credentials |
+| 12 | **Workplace Learning Tracker** | ⬜ Planned | Log on-the-job training hours, supervisor assessments, workplace competency sign-offs |
+| 13 | **Skill Gap Analysis** | ⬜ Planned | Compare student skills against industry demand data |
+| 14 | **Career Pathway Mapping** | ⬜ Planned | Visual skill trees connecting competencies to career outcomes |
 
-| # | Feature | Description |
-|---|---------|-------------|
-| 7 | **Skills Taxonomy Engine** | A structured ontology of skills (technical + soft) mapped to industry standards (e.g., O*NET, ESCO). Every course, assessment, and credential links back to specific skills |
-| 8 | **Competency Tracking & Progression** | Students advance by demonstrating mastery, not by time in class. Progress dashboards show skill acquisition in real-time |
-| 9 | **Digital Badges & Micro-Credentials** | Verifiable, stackable credentials issued on skill mastery. Shareable on LinkedIn/portfolios. Aligns with Open Badges standard |
-| 10 | **Portfolio-Based Assessment** | Students submit project work, artifacts, and evidence of competency — replacing or supplementing traditional exams |
+### Phase 4: AI & Analytics — ⬜ Planned
 
-### Phase 3: Industry Integration
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 15 | **Learning Analytics Dashboard** | ⬜ Planned | Real-time metrics: enrollment trends, completion rates, skill acquisition velocity |
+| 16 | **AI-Powered Recommendations** | ⬜ Planned | Personalized course suggestions based on career goals and current skills |
+| 17 | **Predictive Retention Alerts** | ⬜ Planned | Flag at-risk students based on engagement patterns |
+| 18 | **Outcome Reporting** | ⬜ Planned | Track employment rates, credential-to-job conversion |
 
-| # | Feature | Description |
-|---|---------|-------------|
-| 11 | **Industry Partner Portal** | Companies can post apprenticeship/internship opportunities, review student portfolios, and validate skill credentials |
-| 12 | **Workplace Learning Tracker** | Log and verify on-the-job training hours, supervisor assessments, and workplace competency sign-offs |
-| 13 | **Skill Gap Analysis** | Compare student skill profiles against industry demand data. Shows students and advisors where to focus next |
-| 14 | **Career Pathway Mapping** | Visual skill trees showing how current competencies connect to career outcomes |
+### Phase 5: Communication & Collaboration — ⬜ Planned
 
-### Phase 4: AI & Analytics (Intelligence Layer)
+| # | Feature | Status | Description |
+|---|---------|--------|-------------|
+| 19 | **Notification System** | ⬜ Planned | Multi-channel alerts (in-app, email, SMS) |
+| 20 | **Peer Collaboration Spaces** | ⬜ Planned | Project-based group workspaces |
+| 21 | **Mentor Matching** | ⬜ Planned | Connect students with industry mentors |
 
-| # | Feature | Description |
-|---|---------|-------------|
-| 15 | **Learning Analytics Dashboard** | Real-time metrics: enrollment trends, completion rates, skill acquisition velocity, at-risk student detection |
-| 16 | **AI-Powered Recommendations** | Personalized course/module suggestions based on career goals, current skills, and learning pace |
-| 17 | **Predictive Retention Alerts** | Flag students likely to drop out based on engagement patterns — enabling early advisor intervention |
-| 18 | **Outcome Reporting** | Track employment rates, employer satisfaction, and credential-to-job conversion — proving ROI for the institution |
+### API Summary (Implemented)
 
-### Phase 5: Communication & Collaboration
-
-| # | Feature | Description |
-|---|---------|-------------|
-| 19 | **Notification System** | Multi-channel alerts (in-app, email, SMS) for deadlines, schedule changes, and milestones |
-| 20 | **Peer Collaboration Spaces** | Project-based group workspaces for team assignments — mirroring modern workplace collaboration |
-| 21 | **Mentor Matching** | Connect students with industry mentors based on career goals and skill alignment |
+| Endpoint Group | Methods | Description |
+|---------------|---------|-------------|
+| `/api/tenants` | POST, GET, PATCH, DELETE | Multi-tenant management |
+| `/api/auth/*` | POST | Register, login, refresh, logout, password reset |
+| `/api/users` | GET, PATCH | User profiles and admin management |
+| `/api/students` | POST, GET, PATCH | Student profile CRUD |
+| `/api/enrollments` | POST, GET, PATCH | Enrollment lifecycle |
+| `/api/programs` | POST, GET, PATCH, DELETE | Program management |
+| `/api/courses` | POST, GET, PATCH, DELETE | Course management (with track filter) |
+| `/api/instructors` | POST, GET, PATCH | Instructor profile CRUD |
+| `/api/course-assignments` | POST, GET, PATCH, DELETE | Instructor-course assignments |
+| `/api/skill-categories` | POST, GET, PATCH, DELETE | Skill category management |
+| `/api/skills` | POST, GET, PATCH, DELETE | Skill CRUD (with category/type filters) |
+| `/api/skill-mappings/*` | POST, GET, PATCH, DELETE | Course-skill and student-skill mappings |
 
 ---
 
