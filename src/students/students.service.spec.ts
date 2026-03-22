@@ -1,76 +1,133 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
+import { NotFoundException, ConflictException } from '@nestjs/common';
 import { StudentsService } from './students.service';
+import { StudentProfile, StudentStatus } from './entities/student-profile.entity';
+
+type MockRepository<T extends ObjectLiteral = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
+
+const createMockRepository = <T extends ObjectLiteral = any>(): MockRepository<T> => ({
+  create: jest.fn(),
+  save: jest.fn(),
+  findOne: jest.fn(),
+  findAndCount: jest.fn(),
+  update: jest.fn(),
+});
 
 describe('StudentsService', () => {
   let service: StudentsService;
+  let repo: MockRepository<StudentProfile>;
+
+  const tenantId = '00000000-0000-0000-0000-000000000001';
+
+  const mockProfile: StudentProfile = {
+    id: '00000000-0000-0000-0000-000000000010',
+    tenantId,
+    userId: '00000000-0000-0000-0000-000000000020',
+    studentNumber: 'STU-001',
+    dateOfBirth: null,
+    address: null,
+    emergencyContact: null,
+    careerAspirations: null,
+    priorCompetencies: null,
+    learningTrack: 'STEM',
+    status: StudentStatus.APPLICANT,
+    enrollmentDate: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  } as StudentProfile;
 
   beforeEach(async () => {
+    repo = createMockRepository();
+
     const module: TestingModule = await Test.createTestingModule({
-      providers: [StudentsService],
+      providers: [
+        StudentsService,
+        { provide: getRepositoryToken(StudentProfile), useValue: repo },
+      ],
     }).compile();
 
     service = module.get<StudentsService>(StudentsService);
   });
 
-  describe('findAll', () => {
-    it('should return an array of students', () => {
-      const result = service.findAll();
-      expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBeGreaterThan(0);
+  describe('create', () => {
+    it('should create a student profile', async () => {
+      repo.findOne!.mockResolvedValue(null);
+      repo.create!.mockReturnValue(mockProfile);
+      repo.save!.mockResolvedValue(mockProfile);
+
+      const result = await service.create(tenantId, {
+        userId: mockProfile.userId,
+        studentNumber: 'STU-001',
+        learningTrack: 'STEM',
+      });
+
+      expect(result).toEqual(mockProfile);
+      expect(repo.create).toHaveBeenCalled();
     });
 
-    it('should return students with the required fields', () => {
-      const result = service.findAll();
-      result.forEach((student) => {
-        expect(student).toHaveProperty('id');
-        expect(student).toHaveProperty('name');
-        expect(student).toHaveProperty('email');
-        expect(student).toHaveProperty('gradeLevel');
-        expect(student).toHaveProperty('learningTrack');
-        expect(student).toHaveProperty('enrolledAt');
-      });
+    it('should throw ConflictException for duplicate student number', async () => {
+      repo.findOne!.mockResolvedValue(mockProfile);
+
+      await expect(
+        service.create(tenantId, {
+          userId: mockProfile.userId,
+          studentNumber: 'STU-001',
+        }),
+      ).rejects.toThrow(ConflictException);
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return paginated students', async () => {
+      repo.findAndCount!.mockResolvedValue([[mockProfile], 1]);
+
+      const result = await service.findAll(tenantId, { page: 1, limit: 20 });
+
+      expect(result.data).toHaveLength(1);
+      expect(result.meta.total).toBe(1);
     });
   });
 
   describe('findOne', () => {
-    it('should return the correct student for a valid id', () => {
-      const result = service.findOne('st-001');
-      expect(result).toBeDefined();
-      expect(result!.id).toBe('st-001');
-      expect(result!.name).toBe('Alice Johnson');
+    it('should return a student profile', async () => {
+      repo.findOne!.mockResolvedValue(mockProfile);
+
+      const result = await service.findOne(tenantId, mockProfile.id);
+      expect(result.id).toBe(mockProfile.id);
     });
 
-    it('should return undefined for an unknown id', () => {
-      const result = service.findOne('st-999');
-      expect(result).toBeUndefined();
-    });
-  });
+    it('should throw NotFoundException for unknown id', async () => {
+      repo.findOne!.mockResolvedValue(null);
 
-  describe('create', () => {
-    it('should create a new student and return it', () => {
-      const before = service.findAll().length;
-      const created = service.create({
-        name: 'Test Student',
-        email: 'test@school.example',
-        gradeLevel: 'Grade 8',
-        learningTrack: 'General',
-      });
-      expect(created).toHaveProperty('id');
-      expect(created.name).toBe('Test Student');
-      expect(service.findAll().length).toBe(before + 1);
+      await expect(
+        service.findOne(tenantId, 'nonexistent'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('update', () => {
-    it('should update an existing student and return the updated record', () => {
-      const updated = service.update('st-001', { gradeLevel: 'Grade 10' });
-      expect(updated).toBeDefined();
-      expect(updated!.gradeLevel).toBe('Grade 10');
+    it('should update a student profile', async () => {
+      const updated = { ...mockProfile, address: '456 New St' };
+      repo.findOne!.mockResolvedValue(mockProfile);
+      repo.save!.mockResolvedValue(updated);
+
+      const result = await service.update(tenantId, mockProfile.id, {
+        address: '456 New St',
+      });
+      expect(result.address).toBe('456 New St');
     });
 
-    it('should return undefined when updating a non-existent student', () => {
-      const updated = service.update('st-999', { gradeLevel: 'Grade 10' });
-      expect(updated).toBeUndefined();
+    it('should throw ConflictException for duplicate student number on update', async () => {
+      const other = { ...mockProfile, id: 'other-id', studentNumber: 'STU-002' };
+      repo.findOne!
+        .mockResolvedValueOnce(mockProfile) // findOne for the profile
+        .mockResolvedValueOnce(other);       // findOne for conflict check
+
+      await expect(
+        service.update(tenantId, mockProfile.id, { studentNumber: 'STU-002' }),
+      ).rejects.toThrow(ConflictException);
     });
   });
 });

@@ -12,7 +12,7 @@ import {
   Course,
   CreateCourseDto,
 } from './courses.service';
-import { LearningTrack } from '../students/students.service';
+import { LearningTrack } from '../students/entities/student-profile.entity';
 
 @Controller('courses')
 export class CoursesController {

@@ -2,65 +2,89 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { NotFoundException } from '@nestjs/common';
 import { StudentsController } from './students.controller';
 import { StudentsService } from './students.service';
+import { StudentProfile, StudentStatus } from './entities/student-profile.entity';
 
 describe('StudentsController', () => {
   let controller: StudentsController;
-  let service: StudentsService;
+  let service: Partial<Record<keyof StudentsService, jest.Mock>>;
+
+  const tenantId = '00000000-0000-0000-0000-000000000001';
+
+  const mockProfile: StudentProfile = {
+    id: '00000000-0000-0000-0000-000000000010',
+    tenantId,
+    userId: '00000000-0000-0000-0000-000000000020',
+    studentNumber: 'STU-001',
+    dateOfBirth: null,
+    address: null,
+    emergencyContact: null,
+    careerAspirations: null,
+    priorCompetencies: null,
+    learningTrack: 'STEM',
+    status: StudentStatus.APPLICANT,
+    enrollmentDate: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  } as StudentProfile;
 
   beforeEach(async () => {
+    service = {
+      create: jest.fn(),
+      findAll: jest.fn(),
+      findOne: jest.fn(),
+      update: jest.fn(),
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [StudentsController],
-      providers: [StudentsService],
+      providers: [{ provide: StudentsService, useValue: service }],
     }).compile();
 
     controller = module.get<StudentsController>(StudentsController);
-    service = module.get<StudentsService>(StudentsService);
   });
 
   describe('findAll', () => {
-    it('should return all students', () => {
-      const result = controller.findAll();
-      expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(service.findAll().length);
+    it('should return paginated students', async () => {
+      const result = { data: [mockProfile], meta: { total: 1, page: 1, limit: 20, totalPages: 1 } };
+      service.findAll!.mockResolvedValue(result);
+
+      expect(await controller.findAll(tenantId, { page: 1, limit: 20 })).toEqual(result);
     });
   });
 
   describe('findOne', () => {
-    it('should return a single student by id', () => {
-      const result = controller.findOne('st-001');
-      expect(result.id).toBe('st-001');
+    it('should return a student profile', async () => {
+      service.findOne!.mockResolvedValue(mockProfile);
+
+      expect(await controller.findOne(tenantId, mockProfile.id)).toEqual(mockProfile);
     });
 
-    it('should throw NotFoundException for an unknown id', () => {
-      expect(() => controller.findOne('st-999')).toThrow(NotFoundException);
+    it('should propagate NotFoundException', async () => {
+      service.findOne!.mockRejectedValue(new NotFoundException());
+
+      await expect(controller.findOne(tenantId, 'bad-id')).rejects.toThrow(NotFoundException);
     });
   });
 
   describe('create', () => {
-    it('should create and return a new student', () => {
-      const before = controller.findAll().length;
-      const created = controller.create({
-        name: 'New Student',
-        email: 'new@school.example',
-        gradeLevel: 'Grade 7',
-        learningTrack: 'Trades',
+    it('should create and return a student profile', async () => {
+      service.create!.mockResolvedValue(mockProfile);
+
+      const result = await controller.create(tenantId, {
+        userId: mockProfile.userId,
+        studentNumber: 'STU-001',
       });
-      expect(created).toHaveProperty('id');
-      expect(created.name).toBe('New Student');
-      expect(controller.findAll().length).toBe(before + 1);
+      expect(result).toEqual(mockProfile);
     });
   });
 
   describe('update', () => {
-    it('should update and return the student', () => {
-      const updated = controller.update('st-002', { gradeLevel: 'Grade 11' });
-      expect(updated.gradeLevel).toBe('Grade 11');
-    });
+    it('should update and return the profile', async () => {
+      const updated = { ...mockProfile, address: 'New Address' };
+      service.update!.mockResolvedValue(updated);
 
-    it('should throw NotFoundException when updating a non-existent student', () => {
-      expect(() =>
-        controller.update('st-999', { gradeLevel: 'Grade 11' }),
-      ).toThrow(NotFoundException);
+      const result = await controller.update(tenantId, mockProfile.id, { address: 'New Address' });
+      expect(result.address).toBe('New Address');
     });
   });
 });

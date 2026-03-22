@@ -1,81 +1,94 @@
-import { Injectable } from '@nestjs/common';
-
-export type LearningTrack =
-  | 'STEM'
-  | 'Arts'
-  | 'Entrepreneurship'
-  | 'Trades'
-  | 'General';
-
-export interface Student {
-  id: string;
-  name: string;
-  email: string;
-  gradeLevel: string;
-  learningTrack: LearningTrack;
-  enrolledAt: string;
-}
-
-export interface CreateStudentDto {
-  name: string;
-  email: string;
-  gradeLevel: string;
-  learningTrack: LearningTrack;
-}
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { StudentProfile } from './entities/student-profile.entity.js';
+import { CreateStudentProfileDto } from './dto/create-student-profile.dto.js';
+import { UpdateStudentProfileDto } from './dto/update-student-profile.dto.js';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto.js';
+import { PaginatedResult } from '../common/interfaces/paginated-result.interface.js';
 
 @Injectable()
 export class StudentsService {
-  private readonly students: Student[] = [
-    {
-      id: 'st-001',
-      name: 'Alice Johnson',
-      email: 'alice.johnson@school.example',
-      gradeLevel: 'Grade 9',
-      learningTrack: 'STEM',
-      enrolledAt: '2024-09-01T08:00:00Z',
-    },
-    {
-      id: 'st-002',
-      name: 'Marcus Williams',
-      email: 'marcus.williams@school.example',
-      gradeLevel: 'Grade 10',
-      learningTrack: 'Arts',
-      enrolledAt: '2024-09-01T08:00:00Z',
-    },
-    {
-      id: 'st-003',
-      name: 'Priya Patel',
-      email: 'priya.patel@school.example',
-      gradeLevel: 'Grade 11',
-      learningTrack: 'Entrepreneurship',
-      enrolledAt: '2024-09-01T08:00:00Z',
-    },
-  ];
+  constructor(
+    @InjectRepository(StudentProfile)
+    private readonly studentRepo: Repository<StudentProfile>,
+  ) {}
 
-  private nextIdCounter = 4;
+  async create(
+    tenantId: string,
+    dto: CreateStudentProfileDto,
+  ): Promise<StudentProfile> {
+    const existing = await this.studentRepo.findOne({
+      where: { tenantId, studentNumber: dto.studentNumber },
+    });
+    if (existing) {
+      throw new ConflictException(
+        `Student number "${dto.studentNumber}" already exists in this tenant`,
+      );
+    }
 
-  findAll(): Student[] {
-    return this.students;
+    const profile = this.studentRepo.create({ ...dto, tenantId });
+    return this.studentRepo.save(profile);
   }
 
-  findOne(id: string): Student | undefined {
-    return this.students.find((s) => s.id === id);
-  }
+  async findAll(
+    tenantId: string,
+    query: PaginationQueryDto,
+  ): Promise<PaginatedResult<StudentProfile>> {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 20;
+    const skip = (page - 1) * limit;
 
-  create(dto: CreateStudentDto): Student {
-    const student: Student = {
-      id: `st-${String(this.nextIdCounter++).padStart(3, '0')}`,
-      ...dto,
-      enrolledAt: new Date().toISOString(),
+    const [data, total] = await this.studentRepo.findAndCount({
+      where: { tenantId },
+      relations: ['user'],
+      order: { createdAt: 'DESC' },
+      skip,
+      take: limit,
+    });
+
+    return {
+      data,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
-    this.students.push(student);
-    return student;
   }
 
-  update(id: string, dto: Partial<CreateStudentDto>): Student | undefined {
-    const student = this.findOne(id);
-    if (!student) return undefined;
-    Object.assign(student, dto);
-    return student;
+  async findOne(tenantId: string, id: string): Promise<StudentProfile> {
+    const profile = await this.studentRepo.findOne({
+      where: { id, tenantId },
+      relations: ['user', 'enrollments'],
+    });
+    if (!profile) {
+      throw new NotFoundException(
+        `Student profile with id "${id}" not found`,
+      );
+    }
+    return profile;
+  }
+
+  async update(
+    tenantId: string,
+    id: string,
+    dto: UpdateStudentProfileDto,
+  ): Promise<StudentProfile> {
+    const profile = await this.findOne(tenantId, id);
+
+    if (dto.studentNumber && dto.studentNumber !== profile.studentNumber) {
+      const taken = await this.studentRepo.findOne({
+        where: { tenantId, studentNumber: dto.studentNumber },
+      });
+      if (taken) {
+        throw new ConflictException(
+          `Student number "${dto.studentNumber}" already exists in this tenant`,
+        );
+      }
+    }
+
+    Object.assign(profile, dto);
+    return this.studentRepo.save(profile);
   }
 }
