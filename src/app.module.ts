@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module.js';
 import { PainPointsModule } from './pain-points/pain-points.module.js';
 import { StudentsModule } from './students/students.module.js';
 import { CoursesModule } from './courses/courses.module.js';
+import { InstructorsModule } from './instructors/instructors.module.js';
 import { SchedulesModule } from './schedules/schedules.module.js';
 import { AssessmentsModule } from './assessments/assessments.module.js';
 import { MessagesModule } from './messages/messages.module.js';
@@ -43,6 +44,7 @@ import databaseConfig from './config/database.config.js';
     PainPointsModule,
     StudentsModule,
     CoursesModule,
+    InstructorsModule,
     SchedulesModule,
     AssessmentsModule,
     MessagesModule,
