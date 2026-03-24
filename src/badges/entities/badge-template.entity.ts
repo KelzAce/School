@@ -40,7 +40,7 @@ export class BadgeTemplate extends BaseEntity {
   description: string | null;
 
   /** URL to the badge image (PNG/SVG) */
-  @Column({ length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   imageUrl: string | null;
 
   @Column({ type: 'enum', enum: BadgeLevel, default: BadgeLevel.FOUNDATION })
@@ -58,12 +58,12 @@ export class BadgeTemplate extends BaseEntity {
   criteria: string | null;
 
   /** Issuer name (school/org) for Open Badges */
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   issuerName: string | null;
 
   /** Issuer URL for Open Badges verification */
-  @Column({ length: 500, nullable: true })
-  issuerUrl: string | null;
+ @Column({ type: 'varchar', length: 500, nullable: true })
+issuerUrl: string | null;
 
   /** Tags for search and categorisation */
   @Column({ type: 'jsonb', default: [] })

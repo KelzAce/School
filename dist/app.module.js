@@ -22,10 +22,14 @@ const users_module_js_1 = require("./users/users.module.js");
 const pain_points_module_js_1 = require("./pain-points/pain-points.module.js");
 const students_module_js_1 = require("./students/students.module.js");
 const courses_module_js_1 = require("./courses/courses.module.js");
+const instructors_module_js_1 = require("./instructors/instructors.module.js");
+const skills_module_js_1 = require("./skills/skills.module.js");
 const schedules_module_js_1 = require("./schedules/schedules.module.js");
 const assessments_module_js_1 = require("./assessments/assessments.module.js");
 const messages_module_js_1 = require("./messages/messages.module.js");
 const onboarding_module_js_1 = require("./onboarding/onboarding.module.js");
+const competency_module_js_1 = require("./competency/competency.module.js");
+const badges_module_js_1 = require("./badges/badges.module.js");
 const jwt_auth_guard_js_1 = require("./auth/guards/jwt-auth.guard.js");
 const database_config_js_1 = __importDefault(require("./config/database.config.js"));
 let AppModule = class AppModule {
@@ -58,10 +62,14 @@ exports.AppModule = AppModule = __decorate([
             pain_points_module_js_1.PainPointsModule,
             students_module_js_1.StudentsModule,
             courses_module_js_1.CoursesModule,
+            instructors_module_js_1.InstructorsModule,
+            skills_module_js_1.SkillsModule,
             schedules_module_js_1.SchedulesModule,
             assessments_module_js_1.AssessmentsModule,
             messages_module_js_1.MessagesModule,
             onboarding_module_js_1.OnboardingModule,
+            competency_module_js_1.CompetencyModule,
+            badges_module_js_1.BadgesModule,
         ],
         controllers: [app_controller_js_1.AppController],
         providers: [
