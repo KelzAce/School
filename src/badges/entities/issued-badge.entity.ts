@@ -55,7 +55,7 @@ export class IssuedBadge extends BaseEntity {
   verificationHash: string;
 
   /** Public verification URL */
-  @Column({ length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   verificationUrl: string | null;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
@@ -78,6 +78,6 @@ export class IssuedBadge extends BaseEntity {
     url?: string;
   }> | null;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   issuedBy: string | null;
 }

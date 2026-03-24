@@ -38,7 +38,13 @@ export class StudentSkill extends BaseEntity {
   currentLevel: ProficiencyLevel;
 
   /** How the proficiency was verified */
-  @Column({ length: 50, nullable: true })
+  // @Column({ length: 50, nullable: true })
+  // verifiedBy: string | null;
+
+  // @Column({ type: 'uuid', nullable: true })
+  // verifiedById: string | null;
+
+  @Column({ type: 'uuid', nullable: true })
   verifiedBy: string | null;
 
   @Column({ type: 'timestamptz', nullable: true })

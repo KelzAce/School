@@ -35,13 +35,13 @@ export class User extends BaseEntity {
   @Exclude()
   passwordHash: string;
 
-  @Column({ length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   firstName: string;
 
-  @Column({ length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: true })
   lastName: string;
 
-  @Column({ length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   phone: string | null;
 
   @Column({ type: 'enum', enum: UserRole, default: UserRole.STUDENT })

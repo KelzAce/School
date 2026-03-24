@@ -44,13 +44,13 @@ export class StudentProfile extends BaseEntity {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   studentNumber: string;
 
   @Column({ type: 'date', nullable: true })
   dateOfBirth: string | null;
 
-  @Column({ length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   address: string | null;
 
   @Column({ type: 'jsonb', nullable: true })
@@ -62,9 +62,9 @@ export class StudentProfile extends BaseEntity {
   @Column({ type: 'jsonb', nullable: true })
   priorCompetencies: string[] | null;
 
-  @Column({ length: 50, default: 'General' })
+  @Column({ type: 'varchar', length: 50, default: 'General' })
   learningTrack: LearningTrack;
-
+  
   @Column({ type: 'enum', enum: StudentStatus, default: StudentStatus.APPLICANT })
   status: StudentStatus;
 

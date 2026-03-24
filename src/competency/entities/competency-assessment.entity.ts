@@ -83,7 +83,7 @@ export class CompetencyAssessment extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   evidence: string | null;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   assessedBy: string | null;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })

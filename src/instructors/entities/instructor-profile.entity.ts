@@ -42,10 +42,10 @@ export class InstructorProfile extends BaseEntity {
   @JoinColumn({ name: 'userId' })
   user: User;
 
-  @Column({ length: 50 })
+  @Column({ type: 'varchar', length: 50 })
   employeeNumber: string;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   title: string | null;
 
   @Column({ type: 'text', nullable: true })

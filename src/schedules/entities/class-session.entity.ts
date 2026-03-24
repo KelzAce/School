@@ -81,7 +81,7 @@ export class ClassSession extends BaseEntity {
   @Column({ type: 'enum', enum: SessionType, default: SessionType.LECTURE })
   sessionType: SessionType;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   room: string | null;
 
   @Column({ type: 'enum', enum: DayOfWeek })

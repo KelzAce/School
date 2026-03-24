@@ -47,10 +47,10 @@ export class MicroCredential extends BaseEntity {
   description: string | null;
 
   /** Issuer details for CLR/Open Badges */
-  @Column({ length: 255, nullable: true })
-  issuerName: string | null;
+  @Column({ type: 'varchar', length: 255, nullable: true })
+issuerName: string | null;
 
-  @Column({ length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   issuerUrl: string | null;
 
   /** Badge IDs that compose this credential */
@@ -71,7 +71,7 @@ export class MicroCredential extends BaseEntity {
   @Column({ length: 64 })
   verificationHash: string;
 
-  @Column({ length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true })
   verificationUrl: string | null;
 
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
@@ -86,7 +86,7 @@ export class MicroCredential extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   revocationReason: string | null;
 
-  @Column({ length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   issuedBy: string | null;
 
   /** Metadata: certifying body, accreditation, etc. */

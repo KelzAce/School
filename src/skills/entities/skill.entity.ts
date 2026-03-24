@@ -57,11 +57,11 @@ export class Skill extends BaseEntity {
   type: SkillType;
 
   /** O*NET Standard Occupational Classification code */
-  @Column({ length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   onetCode: string | null;
 
   /** European Skills, Competences, Qualifications and Occupations code */
-  @Column({ length: 50, nullable: true })
+  @Column({ type: 'varchar', length: 50, nullable: true })
   escoCode: string | null;
 
   @Column({ type: 'jsonb', default: [] })
