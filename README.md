@@ -7,7 +7,7 @@
 - **Runtime:** Node.js
 - **Framework:** NestJS
 - **Language:** TypeScript
-- **API Docs:** Swagger/OpenAPI (available at `/api/docs`)
+- **API Docs:** Swagger/OpenAPI (https://school-xhfr.onrender.com/api/docs)
 - **Testing:** Jest (unit + e2e)
 
 ## Getting Started
