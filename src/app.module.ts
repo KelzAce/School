@@ -29,16 +29,15 @@ import databaseConfig from './config/database.config.js';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
-        type: 'postgres' as const,
-        host: config.get<string>('database.host'),
-        port: config.get<number>('database.port'),
-        username: config.get<string>('database.username'),
-        password: config.get<string>('database.password'),
-        database: config.get<string>('database.database'),
-        synchronize: config.get<boolean>('database.synchronize'),
-        logging: config.get<boolean>('database.logging'),
+      useFactory: () => ({
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
         autoLoadEntities: true,
+        synchronize: false,
+        logging: false,
+        ssl: {
+          rejectUnauthorized: false,
+        },
       }),
     }),
     TenantsModule,
@@ -65,4 +64,4 @@ import databaseConfig from './config/database.config.js';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
