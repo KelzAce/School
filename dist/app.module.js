@@ -30,6 +30,7 @@ const messages_module_js_1 = require("./messages/messages.module.js");
 const onboarding_module_js_1 = require("./onboarding/onboarding.module.js");
 const competency_module_js_1 = require("./competency/competency.module.js");
 const badges_module_js_1 = require("./badges/badges.module.js");
+const industry_module_js_1 = require("./industry/industry.module.js");
 const jwt_auth_guard_js_1 = require("./auth/guards/jwt-auth.guard.js");
 const database_config_js_1 = __importDefault(require("./config/database.config.js"));
 let AppModule = class AppModule {
@@ -44,16 +45,15 @@ exports.AppModule = AppModule = __decorate([
             }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 inject: [config_1.ConfigService],
-                useFactory: (config) => ({
+                useFactory: () => ({
                     type: 'postgres',
-                    host: config.get('database.host'),
-                    port: config.get('database.port'),
-                    username: config.get('database.username'),
-                    password: config.get('database.password'),
-                    database: config.get('database.database'),
-                    synchronize: config.get('database.synchronize'),
-                    logging: config.get('database.logging'),
+                    url: process.env.DATABASE_URL,
                     autoLoadEntities: true,
+                    synchronize: false,
+                    logging: false,
+                    ssl: {
+                        rejectUnauthorized: false,
+                    },
                 }),
             }),
             tenants_module_js_1.TenantsModule,
@@ -70,6 +70,7 @@ exports.AppModule = AppModule = __decorate([
             onboarding_module_js_1.OnboardingModule,
             competency_module_js_1.CompetencyModule,
             badges_module_js_1.BadgesModule,
+            industry_module_js_1.IndustryModule,
         ],
         controllers: [app_controller_js_1.AppController],
         providers: [
