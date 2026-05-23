@@ -31,6 +31,7 @@ const onboarding_module_js_1 = require("./onboarding/onboarding.module.js");
 const competency_module_js_1 = require("./competency/competency.module.js");
 const badges_module_js_1 = require("./badges/badges.module.js");
 const industry_module_js_1 = require("./industry/industry.module.js");
+const workplace_module_js_1 = require("./workplace/workplace.module.js");
 const jwt_auth_guard_js_1 = require("./auth/guards/jwt-auth.guard.js");
 const database_config_js_1 = __importDefault(require("./config/database.config.js"));
 let AppModule = class AppModule {
@@ -71,6 +72,7 @@ exports.AppModule = AppModule = __decorate([
             competency_module_js_1.CompetencyModule,
             badges_module_js_1.BadgesModule,
             industry_module_js_1.IndustryModule,
+            workplace_module_js_1.WorkplaceModule,
         ],
         controllers: [app_controller_js_1.AppController],
         providers: [
