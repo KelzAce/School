@@ -44,21 +44,21 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 5 | **Instructor Management** | ✅ Done | Instructor profiles with qualifications, certifications (JSONB), specializations, course load limits. Course assignments with role (primary/assistant/guest) and load validation |
 | 6 | **Class Scheduling & Cohorts** | ✅ Done | Cohort management with program linkage, capacity limits, and lifecycle (forming → active → completed). Class sessions with day/time scheduling, session types (lecture/lab/workshop/field_work/assessment/async), instructor & room assignment, conflict detection. Cohort enrollments with capacity enforcement and status tracking |
 
-### Phase 2: Competency-Based Learning (4IR Core) — 🔄 In Progress (3/4)
+### Phase 2: Competency-Based Learning (4IR Core) — ✅ Complete (4/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 7 | **Skills Taxonomy Engine** | ✅ Done | Hierarchical skill ontology with O*NET/ESCO industry standard codes. Skill categories, typed skills (technical/soft/digital/industry), course-skill mappings with proficiency targets, student skill tracking |
 | 8 | **Competency Tracking & Progression** | ✅ Done | Competency assessments with auto-result calculation (advanced/competent/not_yet_competent). Mastery records immutably log level achievements. Progress dashboards with per-course skill tracking, mastery timelines, and level distribution |
 | 9 | **Digital Badges & Micro-Credentials** | ✅ Done | Badge templates with skill requirements and Open Badges alignment. Badge issuance with SHA-256 verification hashes, evidence tracking, revocation. Stackable micro-credentials bundling badges/skills with public verification endpoints. Public verify-by-hash for badges and credentials |
-| 10 | **Portfolio-Based Assessment** | ⬜ Planned | Students submit project work, artifacts, and evidence of competency |
+| 10 | **Portfolio-Based Assessment** | ✅ Done | Students submit project work, artifacts, and evidence of competency. Rubric-driven scoring, draft→submitted→reviewed lifecycle, per-criterion feedback |
 
-### Phase 3: Industry Integration — ⬜ Planned
+### Phase 3: Industry Integration — 🔄 In Progress (2/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
-| 11 | **Industry Partner Portal** | ⬜ Planned | Companies post apprenticeship/internship opportunities, review portfolios, validate credentials |
-| 12 | **Workplace Learning Tracker** | ⬜ Planned | Log on-the-job training hours, supervisor assessments, workplace competency sign-offs |
+| 11 | **Industry Partner Portal** | ✅ Done | Companies register profiles, post apprenticeship/internship/job opportunities, receive student applications, review portfolios, and validate credentials |
+| 12 | **Workplace Learning Tracker** | ✅ Done | Log on-the-job training hours, supervisor assessments with multi-criteria ratings, workplace competency sign-offs, and student placement summaries |
 | 13 | **Skill Gap Analysis** | ⬜ Planned | Compare student skills against industry demand data |
 | 14 | **Career Pathway Mapping** | ⬜ Planned | Visual skill trees connecting competencies to career outcomes |
 
@@ -78,6 +78,8 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 19 | **Notification System** | ⬜ Planned | Multi-channel alerts (in-app, email, SMS) |
 | 20 | **Peer Collaboration Spaces** | ⬜ Planned | Project-based group workspaces |
 | 21 | **Mentor Matching** | ⬜ Planned | Connect students with industry mentors |
+
+### Phase 2 complete — 4/4 ✅ | Phase 3 in progress — 2/4 🔄
 
 ### API Summary (Implemented)
 
@@ -109,6 +111,28 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/micro-credentials/student/:id` | GET | Student's active micro-credentials |
 | `/api/micro-credentials/verify/:hash` | GET | Public credential verification |
 | `/api/micro-credentials/:id/revoke` | PATCH | Revoke a micro-credential |
+| `/api/portfolios` | POST, GET, PATCH, DELETE | Portfolio CRUD + submit workflow |
+| `/api/portfolios/:id/submit` | POST | Submit portfolio for review |
+| `/api/portfolio-items` | POST, GET, PATCH, DELETE | Portfolio artifacts, reflections, evidence |
+| `/api/portfolio-rubrics` | POST, GET, PATCH, DELETE | Rubric templates with weighted criteria |
+| `/api/portfolio-assessments` | POST, GET, PATCH | Assess portfolios with per-criterion scoring |
+| `/api/portfolio-assessments/:id/criterion-scores` | POST | Add criterion score to assessment |
+| `/api/portfolio-assessments/:id/complete` | PATCH | Complete assessment (auto-computes totals) |
+| `/api/portfolio-assessments/student/:id/summary` | GET | Student portfolio summary |
+| `/api/industry-partners` | POST, GET, PATCH, DELETE | Company profile management |
+| `/api/industry-partners/:id/verify` | PATCH | Admin verification of partner |
+| `/api/opportunities` | POST, GET, PATCH, DELETE | Internship/apprenticeship/job postings |
+| `/api/opportunity-applications` | POST, GET, PATCH | Student applications with status lifecycle |
+| `/api/opportunity-applications/:id/withdraw` | PATCH | Withdraw an application |
+| `/api/partner-portfolio-reviews` | POST, GET, PATCH, DELETE | Industry review of student portfolios |
+| `/api/credential-validations` | POST, GET, PATCH | Partner validation of badges/credentials |
+| `/api/workplace-placements` | POST, GET, PATCH, DELETE | On-the-job placement management |
+| `/api/workplace-placements/:id/complete` | PATCH | Mark placement as completed |
+| `/api/workplace-logs` | POST, GET, PATCH, DELETE | Daily/weekly training log entries |
+| `/api/workplace-logs/:id/review` | PATCH | Supervisor review of log entry |
+| `/api/supervisor-assessments` | POST, GET, PATCH, DELETE | Multi-criteria supervisor assessments |
+| `/api/workplace-competency-signoffs` | POST, GET, DELETE | Supervisor workplace competency sign-offs |
+| `/api/workplace-summary/student/:id` | GET | Full workplace summary for a student |
 
 ---
 
@@ -123,7 +147,7 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 ## License
 
 UNLICENSED (Private)
-# 🏫 School Reimagined
+
 
 > A modern reimagining of traditional education — personalized, accessible, and built for the future.
 
