@@ -62,12 +62,12 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 13 | **Skill Gap Analysis** | ✅ Done | Analyze student readiness for opportunities and custom targets with missing/under-leveled skills, readiness scoring, and recommended courses |
 | 14 | **Career Pathway Mapping** | ✅ Done | Visual skill trees connecting competencies to career outcomes. Pathway CRUD with sector/tag classification, hierarchical skill tree organised via parent-child skill relationships, student progress tracking with per-skill mastery status and next-steps recommendations, and AI-ranked pathway suggestions based on existing student skills |
 
-### Phase 4: AI & Analytics — 🔄 In Progress (1/4)
+### Phase 4: AI & Analytics — 🔄 In Progress (2/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 15 | **Learning Analytics Dashboard** | ✅ Done | Real-time metrics: enrollment trends, completion rates, skill acquisition velocity |
-| 16 | **AI-Powered Recommendations** | ⬜ Planned | Personalized course suggestions based on career goals and current skills |
+| 16 | **AI-Powered Recommendations** | ✅ Done | Personalized course and skill suggestions powered by gap analysis against career pathway requirements — scores courses by skill gap coverage, critical skill priority, and pathway alignment |
 | 17 | **Predictive Retention Alerts** | ⬜ Planned | Flag at-risk students based on engagement patterns |
 | 18 | **Outcome Reporting** | ⬜ Planned | Track employment rates, credential-to-job conversion |
 
@@ -79,7 +79,7 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 20 | **Peer Collaboration Spaces** | ⬜ Planned | Project-based group workspaces |
 | 21 | **Mentor Matching** | ⬜ Planned | Connect students with industry mentors |
 
-### Phase 2 complete — 4/4 ✅ | Phase 3 complete — 4/4 ✅ | Phase 4 in progress — 1/4 🔄
+### Phase 2 complete — 4/4 ✅ | Phase 3 complete — 4/4 ✅ | Phase 4 in progress — 2/4 🔄
 
 ### API Summary (Implemented)
 
@@ -151,6 +151,9 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/analytics/completion-rates` | GET | Overall and per-program completion rates |
 | `/api/analytics/skill-velocity` | GET | Skill mastery acquisition velocity over time |
 | `/api/analytics/programs/:id` | GET | Program-specific enrollment and completion stats |
+| `/api/recommendations/courses/:studentProfileId` | GET | Personalized course recommendations based on skill gaps |
+| `/api/recommendations/courses/:studentProfileId/pathway/:pathwayId` | GET | Course recommendations to advance a specific career pathway |
+| `/api/recommendations/skills/:studentProfileId` | GET | Prioritized skill focus recommendations |
 
 ---
 
