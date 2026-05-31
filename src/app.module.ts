@@ -21,6 +21,7 @@ import { BadgesModule } from './badges/badges.module.js';
 import { IndustryModule } from './industry/industry.module.js';
 import { WorkplaceModule } from './workplace/workplace.module.js';
 import { CareerPathwaysModule } from './career-pathways/career-pathways.module.js';
+import { AnalyticsModule } from './analytics/analytics.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import databaseConfig from './config/database.config.js';
 
@@ -60,6 +61,7 @@ import databaseConfig from './config/database.config.js';
     IndustryModule,
     WorkplaceModule,
     CareerPathwaysModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
