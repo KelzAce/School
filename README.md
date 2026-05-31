@@ -53,14 +53,14 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 9 | **Digital Badges & Micro-Credentials** | ✅ Done | Badge templates with skill requirements and Open Badges alignment. Badge issuance with SHA-256 verification hashes, evidence tracking, revocation. Stackable micro-credentials bundling badges/skills with public verification endpoints. Public verify-by-hash for badges and credentials |
 | 10 | **Portfolio-Based Assessment** | ✅ Done | Students submit project work, artifacts, and evidence of competency. Rubric-driven scoring, draft→submitted→reviewed lifecycle, per-criterion feedback |
 
-### Phase 3: Industry Integration — 🔄 In Progress (2/4)
+### Phase 3: Industry Integration — ✅ Complete (4/4)
 
 | # | Feature | Status | Description |
 |---|---------|--------|-------------|
 | 11 | **Industry Partner Portal** | ✅ Done | Companies register profiles, post apprenticeship/internship/job opportunities, receive student applications, review portfolios, and validate credentials |
 | 12 | **Workplace Learning Tracker** | ✅ Done | Log on-the-job training hours, supervisor assessments with multi-criteria ratings, workplace competency sign-offs, and student placement summaries |
-| 13 | **Skill Gap Analysis** | ⬜ Planned | Compare student skills against industry demand data |
-| 14 | **Career Pathway Mapping** | ⬜ Planned | Visual skill trees connecting competencies to career outcomes |
+| 13 | **Skill Gap Analysis** | ✅ Done | Analyze student readiness for opportunities and custom targets with missing/under-leveled skills, readiness scoring, and recommended courses |
+| 14 | **Career Pathway Mapping** | ✅ Done | Visual skill trees connecting competencies to career outcomes. Pathway CRUD with sector/tag classification, hierarchical skill tree organised via parent-child skill relationships, student progress tracking with per-skill mastery status and next-steps recommendations, and AI-ranked pathway suggestions based on existing student skills |
 
 ### Phase 4: AI & Analytics — ⬜ Planned
 
@@ -79,7 +79,7 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | 20 | **Peer Collaboration Spaces** | ⬜ Planned | Project-based group workspaces |
 | 21 | **Mentor Matching** | ⬜ Planned | Connect students with industry mentors |
 
-### Phase 2 complete — 4/4 ✅ | Phase 3 in progress — 2/4 🔄
+### Phase 2 complete — 4/4 ✅ | Phase 3 complete — 4/4 ✅
 
 ### API Summary (Implemented)
 
@@ -122,6 +122,9 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/industry-partners` | POST, GET, PATCH, DELETE | Company profile management |
 | `/api/industry-partners/:id/verify` | PATCH | Admin verification of partner |
 | `/api/opportunities` | POST, GET, PATCH, DELETE | Internship/apprenticeship/job postings |
+| `/api/skill-gap/student/:studentProfileId/opportunity/:opportunityId` | GET | Analyze a student's readiness and skill gaps for a specific opportunity |
+| `/api/skill-gap/student/:studentProfileId/custom-target` | POST | Analyze a student's skill gap against custom required skills |
+| `/api/skill-gap/student/:studentProfileId/summary` | GET | Cross-opportunity skill gap summary with best-fit opportunities and top missing skills |
 | `/api/opportunity-applications` | POST, GET, PATCH | Student applications with status lifecycle |
 | `/api/opportunity-applications/:id/withdraw` | PATCH | Withdraw an application |
 | `/api/partner-portfolio-reviews` | POST, GET, PATCH, DELETE | Industry review of student portfolios |
@@ -133,6 +136,13 @@ The API runs on port `3002` by default (configurable via `PORT` env variable).
 | `/api/supervisor-assessments` | POST, GET, PATCH, DELETE | Multi-criteria supervisor assessments |
 | `/api/workplace-competency-signoffs` | POST, GET, DELETE | Supervisor workplace competency sign-offs |
 | `/api/workplace-summary/student/:id` | GET | Full workplace summary for a student |
+| `/api/career-pathways` | POST, GET | Create and list career pathways (with sector/isPublished filters) |
+| `/api/career-pathways/:id` | GET, PATCH, DELETE | Single pathway CRUD |
+| `/api/career-pathways/:id/skills` | POST | Add skill requirement to a pathway |
+| `/api/career-pathways/:id/skills/:skillId` | DELETE | Remove skill requirement from a pathway |
+| `/api/career-pathways/:id/skill-tree` | GET | Hierarchical skill tree for a pathway |
+| `/api/career-pathways/:id/student/:studentProfileId/progress` | GET | Student's mastery progress on a specific pathway |
+| `/api/career-pathways/student/:studentProfileId/suggestions` | GET | Ranked pathway suggestions based on student's current skills |
 
 ---
 
