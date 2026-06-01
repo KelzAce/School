@@ -24,6 +24,7 @@ import { CareerPathwaysModule } from './career-pathways/career-pathways.module.j
 import { AnalyticsModule } from './analytics/analytics.module.js';
 import { RecommendationsModule } from './recommendations/recommendations.module.js';
 import { RetentionModule } from './retention/retention.module.js';
+import { OutcomesModule } from './outcomes/outcomes.module.js';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard.js';
 import databaseConfig from './config/database.config.js';
 
@@ -66,6 +67,7 @@ import databaseConfig from './config/database.config.js';
     AnalyticsModule,
     RecommendationsModule,
     RetentionModule,
+    OutcomesModule,
   ],
   controllers: [AppController],
   providers: [
